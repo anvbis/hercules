@@ -33,7 +33,7 @@ class RequestParser(BaseHTTPRequestHandler):
         except ValueError:
             return None
 
-    def get_request(self, tls=False):
+    def get_request(self):
         headers = self.get_headers()
         method, query, _ = self.requestline.split(' ')
 

@@ -40,9 +40,6 @@ def main():
         type=int,
         help='the number of concurrent threads (default: 20)',
         default=20)
-    parser.add_argument('-k', '--tls',
-        help='force connections to utilise HTTPS protocol',
-        action='store_true')
 
     args = parser.parse_args()
     raw_data = args.request.read()
