@@ -26,8 +26,8 @@ class RequestPool(concurrent.futures.ThreadPoolExecutor):
 
 class BruteForce:
 
-    def __init__(self, raw_request, threads, fail):
-        self.parser = RequestParser(raw_request)
+    def __init__(self, raw_request, threads, fail, tls):
+        self.parser = RequestParser(raw_request, tls)
         self.threads = threads
         self.pool = RequestPool(max_workers=threads)
         self.fail = fail
@@ -46,8 +46,7 @@ class BruteForce:
 
         for password in passwords:
             r = self.parser.get_request()
-            r.data = r.data.replace('^USER^', username)
-            r.data = r.data.replace('^PASS^', password)
+            r.data = r.data.replace('^USER^', username).replace('^PASS^', password)
             incomplete.add(self.pool.submit(r.prepare())) 
 
             if len(incomplete) >= self.threads:

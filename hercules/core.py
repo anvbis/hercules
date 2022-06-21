@@ -17,37 +17,59 @@ def banner(usernames, passwords, threads):
           f'; {attempts} tries, ~{attempts//threads} tries per thread')
 
 
-def main():
+def arguments():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-r', '--request',
+    parser.add_argument('-r', metavar='request',
         type=argparse.FileType('rb'),
-        help='the raw HTTP(S) request to emulate',
+        help='the raw HTTP request to emulate',
         required=True)
-    parser.add_argument('-u', '--usernames',
+
+    user_group = parser.add_mutually_exclusive_group(required=True)
+    user_group.add_argument('-u', metavar='username',
+        help='a single username to use in brute-force attack')
+    user_group.add_argument('-U', metavar='file',
         type=argparse.FileType('r'),
-        help='a list of usernames to use in brute-force attack',
-        required=True)
-    parser.add_argument('-p', '--passwords',
+        help='a list of usernames to use in brute-force attack')
+
+    passw_group = parser.add_mutually_exclusive_group(required=True)
+    passw_group.add_argument('-p', metavar='password',
+        help='a single password to use in brute-force attack')
+    passw_group.add_argument('-P', metavar='file',
         type=argparse.FileType('r', errors='replace'),
-        help='a list of passwords to use in brute-force attack',
-        required=True)
-    parser.add_argument('-f', '--fail',
+        help='a list of passwords to use in brute-force attack')
+
+    parser.add_argument('-f', metavar='fail',
         type=str,
         help='the substring expected in unsuccessful attempt',
         required=True)
-    parser.add_argument('-t', '--threads',
+    parser.add_argument('-t', metavar='threads',
         type=int,
         help='the number of concurrent threads (default: 20)',
         default=20)
+    parser.add_argument('-k',
+        help='force all connections to use TLS encryption',
+        action='store_true')
 
-    args = parser.parse_args()
-    raw_data = args.request.read()
-    brute_force = BruteForce(raw_data, args.threads, args.fail)
-    
-    usernames = [line.strip() for line in args.usernames.readlines()]
-    passwords = [line.strip() for line in args.passwords.readlines()]
+    return parser.parse_args()
 
-    banner(len(usernames), len(passwords), args.threads)
+
+def main():
+    args = arguments()
+    raw_data = args.r.read()
+
+    if args.U:
+        usernames = [line.strip() for line in args.U.readlines()]
+    else:
+        usernames = [args.u]
+
+    if args.P:
+        passwords = [line.strip() for line in args.P.readlines()]
+    else:
+        passwords = [args.p]
+
+    banner(len(usernames), len(passwords), args.t)
+
+    brute_force = BruteForce(raw_data, args.t, args.f, args.k)
     brute_force.attack(usernames, passwords) 
 
