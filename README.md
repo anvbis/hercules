@@ -3,17 +3,18 @@
 ## Usage
 
 ```
-usage: hercules.py [-h] -r request (-l username | -L file) (-p password | -P file) -f fail [-t threads]
+usage: hercules.py [-h] -r request (-u username | -U file) (-p password | -P file) -f fail [-t threads] [-k]
 
 options:
   -h, --help   show this help message and exit
-  -r request   the raw HTTP/S request to emulate
-  -l username  a single username to use in brute-force attack
-  -L file      a list of usernames to use in brute-force attack
+  -r request   the raw HTTP request to emulate
+  -u username  a single username to use in brute-force attack
+  -U file      a list of usernames to use in brute-force attack
   -p password  a single password to use in brute-force attack
   -P file      a list of passwords to use in brute-force attack
   -f fail      the substring expected in unsuccessful attempt
   -t threads   the number of concurrent threads (default: 20)
+  -k           force all connections to use TLS encryption
 ```
 
 ## Example
