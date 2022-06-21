@@ -48,4 +48,5 @@ hercules.py: info: starting attack at 2022-06-20 20:42:48.716611
 hercules.py: info: using 1 usernames, 14344392 passwords; 14344392 tries, ~717219 tries per thread
 hercules.py: info: valid credentials found; username=molly,password=111111
 
-Progress   0%|                                                     |        1/14344392 [00:01<186d 1h 20:51, 0.89/s]```
+Progress   0%|                                                     |        1/14344392 [00:01<186d 1h 20:51, 0.89/s]
+```
